@@ -1,2 +1,2 @@
-# packages-core
-PKGBUILDS for core repository
+# packages-community
+PKGBUILDS for Manjaro-Arm Community Repository
