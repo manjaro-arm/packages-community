@@ -8,7 +8,7 @@ pkgrel=1
 pkgdesc='Device Tree Compiler with device tree overlay support'
 url='http://www.devicetree.org/Device_Tree_Compiler'
 conflicts=('dtc')
-arch=(i686 x86_64)
+arch=(i686 x86_64 armv7h)
 license=(GPL2)
 source=(https://www.kernel.org/pub/software/utils/dtc/dtc-$pkgver.tar.xz
         0001-dtc-Symbol-and-local-fixup-generation-support.patch
