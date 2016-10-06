@@ -1,0 +1,24 @@
+Description: add missing examples/ dir in Debian package
+ As desribed in this bug report
+ <URL: https://github.com/samaaron/sonic-pi/issues/1229>,
+ the Debian package for Sonic Pi 2.10.0 was missing the
+ examples/ directory during installation. 
+Forwarded: no
+Author: Hanno Zulla <kontakt@hanno.de>
+Last-Update: 2016-05-17
+
+Index: sonic-pi/app/server/sonicpi/lib/sonicpi/util.rb
+===================================================================
+--- sonic-pi.orig/app/server/sonicpi/lib/sonicpi/util.rb	2016-05-17 10:39:11.043342370 +0200
++++ sonic-pi/app/server/sonicpi/lib/sonicpi/util.rb	2016-05-17 10:41:41.361916610 +0200
+@@ -265,7 +265,9 @@
+     end
+ 
+     def examples_path
+-      File.absolute_path("#{etc_path}/examples")
++      linux_fhs? ?
++        File.absolute_path("/usr/share/sonic-pi/examples") :
++        File.absolute_path("#{etc_path}/examples")
+     end
+ 
+     def server_path

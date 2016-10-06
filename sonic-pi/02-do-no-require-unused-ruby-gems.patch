@@ -1,0 +1,61 @@
+Description: remove rubame gem dependency
+ This section in app/server/core.rb depends on the rubame gem, but the
+ code is only used later in app/server/bin/ws.rb - which is an
+ unmaintained part of the Sonic Pi code. The currently unmaintained
+ HTML GUI of Sonic Pi uses ws.rb as its websocket server. It is not
+ packaged in this .deb and through this patch, we can remove the rubame
+ gem dependency entirely. 
+Forwarded: no
+Author: Hanno Zulla <kontakt@hanno.de>
+Last-Update: 2016-01-22
+
+Index: sonic-pi/app/server/core.rb
+===================================================================
+--- sonic-pi.orig/app/server/core.rb	2016-04-15 14:08:06.680091344 +0200
++++ sonic-pi/app/server/core.rb	2016-04-15 14:08:06.680091344 +0200
+@@ -482,45 +482,6 @@
+   end
+ end
+ 
+-
+-require 'rubame'
+-
+-## Teach Rubame::Server#run to block on IO.select
+-## and therefore not thrash round in a loop
+-module Rubame
+-
+-  class Server
+-    def run(time = 0, &blk)
+-      readable, writable = IO.select(@reading, @writing)
+-
+-      if readable
+-        readable.each do |socket|
+-          client = @clients[socket]
+-          if socket == @socket
+-            client = accept
+-          else
+-            msg = read(client)
+-            client.messaged = msg
+-          end
+-
+-          blk.call(client) if client and blk
+-        end
+-      end
+-
+-      # Check for lazy send items
+-      timer_start = Time.now
+-      time_passed = 0
+-      begin
+-        @clients.each do |s, c|
+-          c.send_some_lazy(5)
+-        end
+-        time_passed = Time.now - timer_start
+-      end while time_passed < time
+-    end
+-  end
+-end
+-
+-
+ # Backport Ruby 2+ thread local variable syntax
+ if RUBY_VERSION < "2"
+   class Thread

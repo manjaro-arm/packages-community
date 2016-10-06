@@ -1,0 +1,72 @@
+Description: use Debian gems instead of upstream's embedded code copies
+ Upstream ships Sonic Pi for Win, OS X and Raspbian and distributes all
+ gems needed by the ruby server within the app/server/vendor/ directory
+ in the source tarball. Debian wants packagers not to use these embedded
+ code copies, but to use Debian's packaged ruby gems instead. This
+ patch removes the code that added the vendor/ directory to the ruby
+ library path. Do note that many of the gems provided by upstream
+ aren't actually used in Sonic Pi, see
+ <URL: https://github.com/samaaron/sonic-pi/issues/928> for details.
+Forwarded: no
+Author: Hanno Zulla <kontakt@hanno.de>
+Last-Update: 2016-01-22
+
+Index: sonic-pi/app/server/core.rb
+===================================================================
+--- sonic-pi.orig/app/server/core.rb	2016-04-15 14:12:02.998058136 +0200
++++ sonic-pi/app/server/core.rb	2016-04-15 14:12:40.489745640 +0200
+@@ -14,53 +14,8 @@
+ 
+ raise "Sonic Pi requires Ruby 1.9.3+ to be installed. You are using version #{RUBY_VERSION}" if RUBY_VERSION < "1.9.3"
+ 
+-## This core file sets up the load path and applies any necessary monkeypatches.
+-
+-## Ensure native lib dir is available
+-require 'rbconfig'
+-ruby_api = RbConfig::CONFIG['ruby_version']
+-os = case RUBY_PLATFORM
+-     when /.*arm.*-linux.*/
+-       :raspberry
+-     when /.*linux.*/
+-       :linux
+-     when /.*darwin.*/
+-       :osx
+-     when /.*mingw.*/
+-       :windows
+-     else
+-       RUBY_PLATFORM
+-     end
+-ruby_gem_native_path = "#{File.expand_path("../rb-native", __FILE__)}"
+-ruby_gem_api_path = "#{ruby_gem_native_path}/#{os}/#{ruby_api}"
+-
+-unless File.directory?(ruby_gem_api_path)
+-  STDERR.puts "*** COULD NOT FIND RUBY GEMS REQUIRED BY SONIC PI ***"
+-  STDERR.puts "Directory '#{ruby_gem_api_path}' not found."
+-  STDERR.puts "Your ruby interpreter is '#{RbConfig.ruby}', supporting ruby api #{ruby_api}."
+-  Dir.entries("#{ruby_gem_native_path}/#{os}/")
+-    .select { |d| (File.directory?("#{ruby_gem_native_path}/#{os}/#{d}") && d != '.' && d != '..') }
+-    .each do |installed_ruby_api|
+-      STDERR.puts "The Sonic Pi on your computer was installed for ruby api #{installed_ruby_api}."
+-    end
+-  STDERR.puts "Please refer to the Sonic Pi install instructions."
+-  STDERR.puts "For installation, you need to run 'app/server/bin/compile-extensions.rb'."
+-  STDERR.puts "If you change or upgrade your ruby interpreter later, you may need to run it again."
+-
+-  raise "Could not access ruby gem directory"
+-end
+-
+-$:.unshift ruby_gem_api_path
+-
+-require 'win32/process' if os == :windows
+-
+-## Ensure all libs in vendor directory are available
+-Dir["#{File.expand_path("../vendor", __FILE__)}/*/lib/"].each do |vendor_lib|
+-  $:.unshift vendor_lib
+-end
+-
+ begin
+-  require 'did_you_mean'
++  require 'did_you_mean' if RUBY_VERSION >= "2.3.0"
+ rescue LoadError
+   warn "Non-critical error: Could not load did_you_mean"
+ end
