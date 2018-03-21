@@ -10,7 +10,7 @@ groups=()
 depends=('python')
 makedepends=('python-distribute')
 source=("https://github.com/RPi-Distro/python-gpiozero/archive/v$pkgver.tar.gz")
-md5sums=('54921a71f2ac9725a8e1cab925d83ab0')
+sha256sums=('d2d7ef04487ac5271c0ff565877ce7a5c376fc05d01bff183c98aa00635af099')
 
 package() {
       cd "$srcdir/$pkgname-$pkgver"
