@@ -4,6 +4,7 @@ PKGBUILDS for Manjaro-Arm Community Repository
 | Package name | Build Status |
 | ------------ | ------------ |
 | hciattach-rpi3   | ![](http://159.65.88.73:8080/view/Community/job/hciattach-rpi3/badge/icon) |
+| inxi   | ![](http://159.65.88.73:8080/view/Community/job/inxi/badge/icon) |
 | pi-bluetooth  | ![](http://159.65.88.73:8080/view/Community/job/pi-bluetooth/badge/icon) |
 | preload | ![](http://159.65.88.73:8080/view/Community/job/preload/badge/icon) |
 | python-gpiozero | ![](http://159.65.88.73:8080/view/Community/job/python-gpiozero/badge/icon) |

@@ -1,0 +1,58 @@
+# Maintainer: Stefano Capitani <stefanoatmanjarodotorg>
+
+pkgname=inxi
+pkgver=2.9.05
+pkgrel=2
+pkgdesc="script to get system information"
+arch=('any')
+url="https://github.com/smxi/inxi"
+license=('GPL')
+depends=('coreutils' 'gawk' 'grep' 'pciutils' 'perl' 'procps-ng' 'sed')
+_commit=51da186c9d889d3e92e3e7f07f7b071fcd1ca770
+optdepends=(
+  "dmidecode: inxi -M if no sys machine data"
+  "file: inxi -o unmounted file system"
+  "hddtemp: inxi -Dx show hdd temp"
+  "net-tools: inxi -i ip lan-deprecated"
+  "iproute2: inxi -i ip lan"
+  "lm_sensors: inxi -s sensors output"
+  "usbutils: inxi -A usb audio;-N usb networking"
+  "kmod: inxi -Ax,-Nx module version"
+  "systemd-sysvcompat: inxi -I runlevel"
+  "sudo: inxi -Dx hddtemp-user;-o file-user"
+  "mesa-demos: inxi -G glx info"
+  "xorg-xdpyinfo: inxi -G multi screen resolution"
+  "xorg-xprop: inxi -S desktop data"
+  "xorg-xrandr: inxi -G single screen resolution"
+)
+options=('zipman')
+source=("$pkgname.tar.gz::$url/archive/$_commit.tar.gz"
+        https://github.com/smxi/inxi/commit/ff0ed7314102b889d4e8a7d0d60b018a3e469971.patch)
+sha256sums=('79c9860d3736a870b72403705063f492ade64fc2c3092713208e3cf2adb78c32'
+            '0fe7e65ec1d6a24ecd43017ce3290918c4fd5a959d6f4f99fe6f7a332612484a')
+
+pkgver() {
+    cd $pkgname-$_commit
+
+    # change version
+    awk '/self_version=/ {print $2}' inxi | cut -c 16-21
+}
+
+prepare() {
+    cd $pkgname-$_commit
+    
+    # temp move inxi to pinxi
+    mv inxi pinxi
+
+    # patches here
+    patch -p1 -i $srcdir/ff0ed7314102b889d4e8a7d0d60b018a3e469971.patch
+
+    # temp move pinxi back to inxi
+    mv pinxi inxi
+}
+
+package() {
+  cd "$srcdir/$pkgname-$_commit"
+  install -D -m755 $pkgname "$pkgdir/usr/bin/$pkgname"
+  install -D -m755 $pkgname.1 "$pkgdir/usr/share/man/man1/$pkgname.1"
+}
