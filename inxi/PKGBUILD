@@ -1,14 +1,14 @@
 # Maintainer: Stefano Capitani <stefanoatmanjarodotorg>
 
 pkgname=inxi
-pkgver=2.9.05
-pkgrel=2
+pkgver=2.9.08
+pkgrel=1
 pkgdesc="script to get system information"
 arch=('any')
 url="https://github.com/smxi/inxi"
 license=('GPL')
 depends=('coreutils' 'gawk' 'grep' 'pciutils' 'perl' 'procps-ng' 'sed')
-_commit=51da186c9d889d3e92e3e7f07f7b071fcd1ca770
+_commit=9e9a67168d8e53afd54d4f68142d76b001833bfc
 optdepends=(
   "dmidecode: inxi -M if no sys machine data"
   "file: inxi -o unmounted file system"
@@ -26,10 +26,8 @@ optdepends=(
   "xorg-xrandr: inxi -G single screen resolution"
 )
 options=('zipman')
-source=("$pkgname.tar.gz::$url/archive/$_commit.tar.gz"
-        https://github.com/smxi/inxi/commit/ff0ed7314102b889d4e8a7d0d60b018a3e469971.patch)
-sha256sums=('79c9860d3736a870b72403705063f492ade64fc2c3092713208e3cf2adb78c32'
-            '0fe7e65ec1d6a24ecd43017ce3290918c4fd5a959d6f4f99fe6f7a332612484a')
+source=("$pkgname-$pkgver-$pkgrel.tar.gz::$url/archive/$_commit.tar.gz")
+sha256sums=('8ef6e924c5a4a5fa01a2ad270eaadb96ef87fddd2a80513cc5c97e8286ab8c21')
 
 pkgver() {
     cd $pkgname-$_commit
@@ -45,7 +43,6 @@ prepare() {
     mv inxi pinxi
 
     # patches here
-    patch -p1 -i $srcdir/ff0ed7314102b889d4e8a7d0d60b018a3e469971.patch
 
     # temp move pinxi back to inxi
     mv pinxi inxi
