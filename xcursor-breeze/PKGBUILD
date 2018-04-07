@@ -1,0 +1,30 @@
+# Maintainer: Bernhard Landauer <oberon@manjaro.org>
+# Maintainer: tnaker
+
+pkgname=xcursor-breeze
+pkgver=5.11.5
+pkgrel=1
+pkgdesc="KDE5 cursor theme"
+url="http://kde-look.org/content/show.php/Breeze?content=165371"
+depends=('libxcursor')
+license=('GPL')
+arch=(any)
+provides=('breeze-snow-cursor-theme')
+conflicts=('breeze-snow-cursor-theme')
+replaces=('breeze-snow-cursor-theme')
+source=("http://download.kde.org/stable/plasma/$pkgver/breeze-$pkgver.tar.xz"
+    'breeze.png'
+    'snow.png')
+md5sums=('16784b990e3957e1a7188b7a01a1769d'
+         'd2a78a35e6aa4bc059bf19887c30a35c'
+         'c23b38a0325920b196e494cbff8205bb')
+
+package() {
+    install -dm755 $pkgdir/usr/share/icons/
+    cp -r breeze-$pkgver/cursors/Breeze/Breeze $pkgdir/usr/share/icons/
+    cp -r breeze-$pkgver/cursors/Breeze_Snow/Breeze_Snow $pkgdir/usr/share/icons/
+    mv $pkgdir/usr/share/icons/Breeze $pkgdir/usr/share/icons/xcursor-breeze
+    mv $pkgdir/usr/share/icons/Breeze_Snow $pkgdir/usr/share/icons/xcursor-breeze-snow
+    cp breeze.png $pkgdir/usr/share/icons/xcursor-breeze/cursors/thumbnail.png
+    cp snow.png $pkgdir/usr/share/icons/xcursor-breeze-snow/cursors/thumbnail.png
+}
