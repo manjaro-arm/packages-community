@@ -1,14 +1,14 @@
 # Maintainer: Stefano Capitani <stefanoatmanjarodotorg>
 
+_commit=48b569eb95bf3b20b36350f81ae1e211faa69d11
 pkgname=inxi
-pkgver=2.9.08
+pkgver=3.0.07
 pkgrel=1
 pkgdesc="script to get system information"
 arch=('any')
 url="https://github.com/smxi/inxi"
 license=('GPL')
 depends=('coreutils' 'gawk' 'grep' 'pciutils' 'perl' 'procps-ng' 'sed')
-_commit=9e9a67168d8e53afd54d4f68142d76b001833bfc
 optdepends=(
   "dmidecode: inxi -M if no sys machine data"
   "file: inxi -o unmounted file system"
@@ -27,7 +27,7 @@ optdepends=(
 )
 options=('zipman')
 source=("$pkgname-$pkgver-$pkgrel.tar.gz::$url/archive/$_commit.tar.gz")
-sha256sums=('8ef6e924c5a4a5fa01a2ad270eaadb96ef87fddd2a80513cc5c97e8286ab8c21')
+sha256sums=('5f8f7f85be61429eed1e4b34c93846899076ae1abdaac812293c02fd7453d4ac')
 
 pkgver() {
     cd $pkgname-$_commit
@@ -36,20 +36,9 @@ pkgver() {
     awk '/self_version=/ {print $2}' inxi | cut -c 16-21
 }
 
-prepare() {
-    cd $pkgname-$_commit
-    
-    # temp move inxi to pinxi
-    mv inxi pinxi
-
-    # patches here
-
-    # temp move pinxi back to inxi
-    mv pinxi inxi
-}
-
 package() {
-  cd "$srcdir/$pkgname-$_commit"
-  install -D -m755 $pkgname "$pkgdir/usr/bin/$pkgname"
-  install -D -m755 $pkgname.1 "$pkgdir/usr/share/man/man1/$pkgname.1"
+    cd "$srcdir/$pkgname-$_commit"
+    install -D -m755 $pkgname "$pkgdir/usr/bin/$pkgname"
+    install -D -m755 $pkgname.1 "$pkgdir/usr/share/man/man1/$pkgname.1"
 }
+
