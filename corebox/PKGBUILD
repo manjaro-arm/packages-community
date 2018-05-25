@@ -1,7 +1,7 @@
  # Maintainer: Fabio 'Lolix' Loli <lolix@disroot.org> -> https://github.com/FabioLolix
 
 pkgname=corebox
-pkgver=2.1.0.r27.ga9de13e
+pkgver=2.1.1.r2.g72434f9
 pkgrel=1
 pkgdesc="Combination of some common desktop apps with Bookmark"
 arch=('x86_64' 'i686' 'arm' 'armv6h' 'armv7h' 'aarch64')
